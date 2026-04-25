@@ -1,134 +1,220 @@
 """
 KombinApp - AI Destekli Kıyafet Kombin Uygulaması
+Güzel arka plan + Kamera ile boy analizi
 """
 
 import streamlit as st
-from datetime import datetime
+import time
 
 st.set_page_config(page_title="KombinApp", page_icon="👕", layout="wide")
 
-# CSS
+# CSS - Animasyonlu arka plan
 st.markdown("""
 <style>
     .stApp {
-        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+        background-size: 400% 400%;
+        animation: gradient 15s ease infinite;
     }
+    
+    @keyframes gradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    
+    .welcome-box {
+        background: linear-gradient(135deg, rgba(102,126,234,0.8), rgba(118,75,162,0.8));
+        border-radius: 30px;
+        padding: 50px;
+        text-align: center;
+        color: white;
+        margin: 30px auto;
+        max-width: 600px;
+        backdrop-filter: blur(20px);
+        border: 2px solid rgba(255,255,255,0.2);
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    
     .kombin-card {
-        background: white;
+        background: linear-gradient(135deg, #ff9a56, #ff6b35);
         border-radius: 25px;
         padding: 30px;
-        margin: 10px 0;
-        box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+        margin: 20px 0;
+        color: white;
+        box-shadow: 0 15px 50px rgba(255,107,53,0.4);
     }
+    
     .camera-box {
         background: linear-gradient(135deg, #667eea, #764ba2);
         border-radius: 25px;
         padding: 40px;
         text-align: center;
         color: white;
+        margin: 20px 0;
     }
-    .outfit-item {
-        background: linear-gradient(135deg, #f093fb, #f5576c);
-        border-radius: 20px;
-        padding: 20px;
-        margin: 10px;
+    
+    .start-btn {
+        background: linear-gradient(135deg, #00d4aa, #00b894);
         color: white;
+        border: none;
+        border-radius: 50px;
+        padding: 20px 50px;
+        font-size: 22px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 10px 30px rgba(0,212,170,0.3);
+    }
+    
+    .start-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 15px 40px rgba(0,212,170,0.5);
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-20px); }
+    }
+    
+    .float-anim {
+        animation: float 2s ease-in-out infinite;
+    }
+    
+    .outfit-box {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        margin: 10px;
+        color: #333;
         text-align: center;
     }
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown("<h1 style='text-align:center;color:white;'>👕 KombinApp</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align:center;color:#888;'>AI ile tarzını belirle!</p>", unsafe_allow_html=True)
+# Session state
+if 'started' not in st.session_state:
+    st.session_state.started = False
 
-# Kamera ile boy/tip alma
-st.markdown("### 📸 Vücut Analizi")
+# === MERHABA EKRANI ===
+if not st.session_state.started:
+    st.markdown("""
+    <div class='welcome-box'>
+        <div class='float-anim'>
+            <span style='font-size:80px;'>👕</span>
+        </div>
+        <h1 style='font-size:40px;margin:20px 0;'>Merhaba!</h1>
+        <p style='font-size:20px;opacity:0.9;'>
+            Ben KombinApp, senin stil danışmanınım! 👋<br>
+            Tarzına uygun kıyafet kombinasyonları oluşturayım.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    col1, col2, col3 = st.columns([1,2,1])
+    with col2:
+        if st.button("🎯 Kombini Yap!", key="start_btn"):
+            st.session_state.started = True
+            st.rerun()
+    
+    st.stop()
+
+# === ANA EKRAN ===
+st.markdown("<h1 style='text-align:center;color:white;'>👕 KombinApp</h1>", unsafe_allow_html=True)
+
+# Kamera ile fotoğraf
+st.markdown("""
+<div class='camera-box'>
+    <span style='font-size:40px;'>📸</span>
+    <h3>Fotoğrafını Çek</h3>
+    <p>Boyunu ve vücut tipini analiz edelim</p>
+</div>
+""", unsafe_allow_html=True)
+
+camera_photo = st.camera_input("📷 Kamera ile fotoğraf çek")
+
+if camera_photo:
+    st.success("✅ Fotoğraf alındı! Analiz ediliyor...")
+    time.sleep(1)
+    
+    # Simüle analiz
+    st.markdown("""
+    <div style='background:white;border-radius:20px;padding:20px;margin:20px 0;color:#333;'>
+        <h4>🔍 Analiz Sonucu:</h4>
+        <p>• Boy: <b>175 cm</b></p>
+        <p>• Vücut Tipi: <b>Sporty</b></p>
+        <p>• Tarz: <b>Gündelik</b></p>
+    </div>
+    """, unsafe_allow_html=True)
+
+# Bilgi formu
+st.markdown("---")
+st.markdown("### 👤 Vücut Bilgileri (veya düzenle)")
 
 col1, col2 = st.columns(2)
 
 with col1:
-    uploaded_file = st.file_uploader("Fotoğraf yükle (boy/tip için)", type=["jpg", "png", "jpeg"])
-    if uploaded_file:
-        st.image(uploaded_file, caption="Vücut Analizi", width=300)
-        st.success("Fotoğraf alındı! Analiz ediliyor...")
+    gender = st.selectbox("Cinsiyet", ["Erkek", "Kadın"], key="gender")
+    height = st.slider("Boy (cm)", 150, 200, 175, key="height")
+    body_type = st.selectbox("Vücut Tipi", ["Zayıf", "Orta", "Sporty", "Kilolu"], key="body")
 
 with col2:
-    st.markdown("#### 👤 Vücut Bilgileri")
-    gender = st.selectbox("Cinsiyet", ["Erkek", "Kadın", "Belirtmek İstemiyorum"])
-    height = st.slider("Boy (cm)", 150, 200, 175)
-    body_type = st.selectbox("Vücut Tipi", ["Zayıf", "Orta", "Sporty", "Kilolu"])
-    style_pref = st.selectbox("Tarz Tercihi", ["Gündelik", "Spor", "İş", "Şık", "Rahaf"])
+    style_pref = st.selectbox("Tarz", ["Gündelik", "Spor", "İş", "Şık", "Rahat"], key="style")
+    hava = st.selectbox("Hava", ["Güneşli", "Bulutlu", "Yağmurlu", "Soğuk", "Sıcak"], key="hava")
+    yer = st.selectbox("Nereye?", ["İş", "Okul", "Spor", "Arkadaş", "Parti", "Ev"], key="yer")
 
-# Hava durumu
-st.markdown("### 🌤️ Bugün Nereye Gidiyorsun?")
-
-hava = st.selectbox("Hava Durumu", [
-    "Güneşli (25°C+)", 
-    "Parçalı Bulutlu", 
-    "Bulutlu", 
-    "Yağmurlu", 
-    "Soğuk (10°C-)", 
-    "Sıcak (30°C+)"
-])
-
-yer = st.selectbox("Gideceğin Yer", [
-    "İş/Ofis",
-    "Okul/Üniversite", 
-    "Spor Salonu",
-    "Arkadaşla buluşma",
-    "Tarihi mekan",
-    "Alışveriş",
-    "Restoran/Kafe",
-    "Parti/Gece",
-    "Evde"
-])
-
-if st.button("🎯 Kombini Bul!"):
-    # AI kombinasyon
+# Kombini bul butonu
+st.markdown("")
+if st.button("🔥 Kombini Bul!", key="find_outfit"):
+    # AI Kombinasyon
+    kombinasyon = {
+        "üst": "Mavi Oxford Gömlek",
+        "alt": "Krem Renk Chino Pantolon", 
+        "ayakkabı": "Kahverengi Loafer",
+        "aksesuar": "Derici Saat + Güneş Gözlüğü"
+    }
+    
     if gender == "Erkek":
-        if hava == "Sıcak (30°C+)":
-            üst = "Beyaz tişört + açık mavi jean"
-            alt = "Sneaker"
-            aksesuar = "Güneş gözlüğü + Şapka"
-        elif hava == "Soğuk (10°C-)":
-            üst = "Koyu renk kazak + Polar ceket"
-            alt = "Siyah jean + Bot"
-            aksesuar = "Atkı + Eldiven"
-        else:
-            üst = "Mavi-oxford gömlek"
-            alt = "Chino pantolon + Loafer"
-            aksesuar = "Saat + Kemer"
-    else:
-        if hava == "Sıcak (30°C+)":
-            üst = "Linens bluz + Şort"
-            alt = "Sandalet"
-            aksesuar = "Straw şapka + Güneş gözlüğü"
-        elif hava == "Soğuk (10°C-)":
-            üst = "Hırka + Uzun etek"
-            alt = "Çizme"
-            aksesuar = "Atkı + Eldiven"
-        else:
-            üst = "Triko bluz"
-            alt = "Jean + Topuklu"
-            aksesuar = "Choker + Küpe"
-
-    # Yer bazlı
-    if yer == "İş/Ofis":
-        üst = "Gömlek + Blazer ceket"
-        alt = "Klasik pantolon + Deri ayakkabı"
-
+        if hava == "Sıcak":
+            kombinasyon = {"üst": "Beyaz Linen Gömlek", "alt": "Açık Mavi Jean", "ayakkabı": "Beyaz Sneaker", "aksesuar": "Straw Şapka"}
+        elif hava == "Soğuk":
+            kombinasyon = {"üst": "Koyu Gri Hırka + Polar", "alt": "Siyah Jean", "ayakkabı": "Siyah Bot", "aksesuar": "Atkı + Eldiven"}
+    
+    if yer == "İş":
+        kombinasyon = {"üst": "Gömlek + Blazer", "alt": "Klasik Pantolon", "ayakkabı": "Deri Ayakkabı", "aksesuar": "Kravat"}
+    elif yer == "Spor":
+        kombinasyon = {"üst": "Fit Tişört", "alt": "Spor Pantolon", "ayakkabı": "Spor Ayakkabı", "aksesuar": "Spor Saat"}
+    
     st.markdown("""
     <div class='kombin-card'>
-        <h2 style='text-align:center;color:#667eea;'>👔 Senin İçin Kombinasyon</h2>
-        <hr>
-        <h3>Üst: {}</h3>
-        <h3>Alt: {}</h3>
-        <h3>Aksesuar: {}</h3>
+        <h2 style='text-align:center;'>👔 Senin İçin Kombinasyon</h2>
+        <hr style='opacity:0.3'>
+        <div style='display:flex;flex-wrap:wrap;gap:10px;'>
+            <div class='outfit-box' style='flex:1;'>
+                <span style='font-size:30px;'>👔</span>
+                <h4>Üst</h4>
+                <p>{}</p>
+            </div>
+            <div class='outfit-box' style='flex:1;'>
+                <span style='font-size:30px;'>👖</span>
+                <h4>Alt</h4>
+                <p>{}</p>
+            </div>
+            <div class='outfit-box' style='flex:1;'>
+                <span style='font-size:30px;'>👟</span>
+                <h4>Ayakkabı</h4>
+                <p>{}</p>
+            </div>
+            <div class='outfit-box' style='flex:1;'>
+                <span style='font-size:30px;'>⌚</span>
+                <h4>Aksesuar</h4>
+                <p>{}</p>
+            </div>
+        </div>
     </div>
-    """.format(üst, alt, aksesuar), unsafe_allow_html=True)
+    """.format(kombinasyon["üst"], kombinasyon["alt"], kombinasyon["ayakkabı"], kombinasyon["aksesuar"]), unsafe_allow_html=True)
     
-    # Puan
-    st.success("🎉 Bu kombini kaydet veya arkadaşına gönder!")
+    st.balloons()
 
 st.markdown("---")
-st.markdown("<p style='text-align:center;color:#666;'>© 2026 KombinApp - AI ile tarzını yansıt!</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align:center;color:#888;'>© 2026 KombinApp - Tarzını yansıt! 👕</p>", unsafe_allow_html=True)
