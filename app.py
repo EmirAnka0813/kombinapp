@@ -217,24 +217,73 @@ with col2:
 # Kombini bul butonu
 st.markdown("")
 if st.button("🔥 Kombini Bul!", key="find_outfit"):
-    # AI Kombinasyon
-    kombinasyon = {
-        "üst": "Mavi Oxford Gömlek",
-        "alt": "Krem Renk Chino Pantolon", 
-        "ayakkabı": "Kahverengi Loafer",
-        "aksesuar": "Derici Saat + Güneş Gözlüğü"
+    import random
+    
+    # Kombinasyon veritabanı
+    ustler = {
+        "Erkek": {
+            "Gündelik": ["Beyaz Tişört", "Mavi Gömlek", "Gris Sweatshirt", "Khaki Shirt", "Striped Polo"],
+            "Spor": ["Fit Tişört", "Dri-Fit Form", "Spor Tank Top", "Compression Tee", "Mesh Üst"],
+            "İş": ["Oxford Gömlek", "Klasik Gömlek", "Beyaz Formal Gömlek", "Chambray Gömlek", "Silk Gömlek"],
+            "Şık": ["Saten Gömlek", "Velvet Blazer", "İpek Tişört", "Jimmy Key Biy", "Skinny Fit Gömlek"],
+            "Rahat": ["Oversize Tişört", "Cardigan", "Henley Yaka", "Oversize Sweatshirt", "Oversize Hoodie"]
+        },
+        "Kadın": {
+            "Gündelik": ["Crop Tişört", "Mom Jean Üstü", "Linen Bluz", "Oversize Sweatshirt", "Striped Tee"],
+            "Spor": ["Sport Bra + Tank", "Tight Üst", "Running Tee", "Yoga Üstü", "Compression Top"],
+            "İş": ["Pencil Skirt Üstü", "Blazer Kombinasyon", "Silk Bluz", "Kadın Oxford", "Capes Blouse"],
+            "Şık": ["Saten Bluz", "Velvet Top", "İpek Fötrük", "Sequin Blouse", "Off-Shoulder Top"],
+            "Rahat": ["Oversize Tişört", "Cozy Hoodie", "Slip Dress", "Maxi Eşofman", "Crop Hoodie"]
+        }
     }
     
-    if gender == "Erkek":
-        if hava == "Sıcak":
-            kombinasyon = {"üst": "Beyaz Linen Gömlek", "alt": "Açık Mavi Jean", "ayakkabı": "Beyaz Sneaker", "aksesuar": "Straw Şapka"}
-        elif hava == "Soğuk":
-            kombinasyon = {"üst": "Koyu Gri Hırka + Polar", "alt": "Siyah Jean", "ayakkabı": "Siyah Bot", "aksesuar": "Atkı + Eldiven"}
+    altlar = {
+        "Erkek": {
+            "Gündelik": ["Mavi Jean", "Chino Pantolon", "Jogger Pantolon", "Cargo Pantolon", "Gris Kadife Pantolon"],
+            "Spor": ["Spor Jean", "Tayt", "Shorts", "Sweatpant", "Training Pantolon"],
+            "İş": ["Klasik Siyah Pantolon", "Chino Pantolon", "Kadife Pantolon", "Şortlu Takım", "Ceket Pantolon"],
+            "Şık": ["Skinny Jean", "Smoking Pantolon", "Desenli Pantolon", "Deri Pantolon", "Yüksek Bel Pantolon"],
+            "Rahat": ["Oversize Jean", "Eşofman Altı", "Jogger", "Relaxed Jean", "Şort"]
+        },
+        "Kadın": {
+            "Gündelik": ["Mom Jean", "Deri Etek", "High Waist Pantolon", "Midi Etek", "Paperbag Jean"],
+            "Spor": ["Tight", "Biker Shorts", "Yoga Pantolon", "Running Şort", "Spor Etek"],
+            "İş": ["Kadın Pantolon", "Pencil Etek", "Midi Etek", "Wide Leg Pantolon", "Tailored Pantolon"],
+            "Şık": ["Mini Etek", "Saten Pantolon", "Deri Etek", "Vinyl Pantolon", "Cip Pakistani"],
+            "Rahat": ["Oversize Jean", "Eşofman", "Relaxed Jean", "Culottes", "Şort"]
+        }
+    }
     
-    if yer == "İş":
-        kombinasyon = {"üst": "Gömlek + Blazer", "alt": "Klasik Pantolon", "ayakkabı": "Deri Ayakkabı", "aksesuar": "Kravat"}
-    elif yer == "Spor":
-        kombinasyon = {"üst": "Fit Tişört", "alt": "Spor Pantolon", "ayakkabı": "Spor Ayakkabı", "aksesuar": "Spor Saat"}
+    ayakkabilar = {
+        "Erkek": {
+            "Gündelik": ["Beyaz Sneaker", "Loafer", "Canvas Sneaker", "Desert Boot", "Moccasin"],
+            "Spor": ["Running Ayakkabı", "Cross Trainer", "Basketbol Ayakkabısı", "Futbol Ayakkabısı", "Trail Ayakkabı"],
+            "İş": ["Deri Ayakkabı", "Oxford Ayakkabı", "Derbi Ayakkabı", "Monk Ayakkabı", "Chelsea Boot"],
+            "Şık": ["Derbi Ayakkabı", "Patent Deri Ayakkabı", "Cip Stiletto", "Prewu Doğe", "Oxford"]
+        }
+    }
+    
+    ayak_eri = {"Erkek": ["Beyaz Sneaker", "Loafer", "Bot", "Sandalet", "Klasik Ayakkabı"]}
+    
+    aksesuar = {
+        "Gündelik": ["Güneş Gözlüğü + Saat", "Bileklik + Saat", "Beanie Şapka + Güneş Gözlüğü", "Krosans + Güneş Gözlüğü"],
+        "Spor": ["Spor Saat + Terlik", "Headband + Spor Çantası", "Fitness Eldiveni + Shaker Bottle", "Spor Gözlüğü + Bandana"],
+        "İş": ["Kravat + Ceptup", "Kemer + Saat", "Cüzdan + Kartlık", "Kravata + İğne"],
+        "Şık": ["Takı Seti + Parfüm", "Cüzdan + Kartlık + Parfüm", "İpek Fular + Zincir", "Yüzük + Bilezik"],
+        "Rahat": ["Baskılı Tişört + Kapşonlu", "Bandana + Bilezik", "Beyaz Tişört + Zincir", "Bershka + Güneş Gözlüğü"]
+    }
+    
+    # Rastgele seç
+    if gender in ustler and style_pref in ustler[gender]:
+        rastgele_ust = random.choice(ustler[gender][style_pref])
+        rastgele_alt = random.choice(altlar[gender][style_pref])
+        rastgele_ayak = random.choice(ayakkabilar.get(gender, ayak_eri.get("Erkek")))
+        rastgele_aksesuar = random.choice(aksesuar[style_pref])
+    else:
+        rastgele_ust = "Tişört + Bluz"
+        rastgele_alt = "Jean + Pantolon"
+        rastgele_ayak = "Sneaker"
+        rastgele_aksesuar = "Güneş Gözlüğü + Saat"
     
     st.markdown("""
     <div class='kombin-card'>
@@ -257,6 +306,15 @@ if st.button("🔥 Kombini Bul!", key="find_outfit"):
                 <p>{}</p>
             </div>
             <div class='outfit-box' style='flex:1;'>
+                <span style='font-size:30px;'>⌚</span>
+                <h4>Aksesuar</h4>
+                <p>{}</p>
+            </div>
+        </div>
+    </div>
+    """.format(rastgele_ust, rastgele_alt, rastgele_ayak, rastgele_aksesuar), unsafe_allow_html=True)
+    
+    st.balloons()
                 <span style='font-size:30px;'>⌚</span>
                 <h4>Aksesuar</h4>
                 <p>{}</p>
