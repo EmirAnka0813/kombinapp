@@ -315,15 +315,6 @@ if st.button("🔥 Kombini Bul!", key="find_outfit"):
     """.format(rastgele_ust, rastgele_alt, rastgele_ayak, rastgele_aksesuar), unsafe_allow_html=True)
     
     st.balloons()
-                <span style='font-size:30px;'>⌚</span>
-                <h4>Aksesuar</h4>
-                <p>{}</p>
-            </div>
-        </div>
-    </div>
-    """.format(kombinasyon["üst"], kombinasyon["alt"], kombinasyon["ayakkabı"], kombinasyon["aksesuar"]), unsafe_allow_html=True)
-    
-    st.balloons()
 
 st.markdown("---")
 st.markdown("<p style='text-align:center;color:#888;'>© 2026 KombinApp - Tarzını yansıt! 👕</p>", unsafe_allow_html=True)
