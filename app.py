@@ -138,7 +138,7 @@ gallery_photo = st.file_uploader("📁 Galeriden fotoğraf seç", type=["jpg", "
 photo = camera_photo if camera_photo else gallery_photo
 
 if photo:
-    st.success("✅ Fotoğraf alındı! Analiz ediliyor..."
+    st.success("✅ Fotoğraf alındı! Analiz ediliyor...")
     time.sleep(1)
     
     # Simüle analiz
