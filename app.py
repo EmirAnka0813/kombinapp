@@ -131,9 +131,9 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-camera_photo = st.camera_input("📷 Kamera ile fotoğraf çek")
+camera_photo = st.camera_input("📷 Fotoğraf Çek")
 
-gallery_photo = st.file_uploader("📁 Galeriden fotoğraf seç", type=["jpg", "png", "jpeg"])
+gallery_photo = st.file_uploader("📁 Galeriden Seç", type=["jpg", "png", "jpeg"])
 
 photo = camera_photo if camera_photo else gallery_photo
 
