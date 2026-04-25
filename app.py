@@ -126,15 +126,19 @@ st.markdown("<h1 style='text-align:center;color:white;'>👕 KombinApp</h1>", un
 st.markdown("""
 <div class='camera-box'>
     <span style='font-size:40px;'>📸</span>
-    <h3>Fotoğrafını Çek</h3>
+    <h3>Fotoğrafını Çek veya Yükle</h3>
     <p>Boyunu ve vücut tipini analiz edelim</p>
 </div>
 """, unsafe_allow_html=True)
 
 camera_photo = st.camera_input("📷 Kamera ile fotoğraf çek")
 
-if camera_photo:
-    st.success("✅ Fotoğraf alındı! Analiz ediliyor...")
+gallery_photo = st.file_uploader("📁 Galeriden fotoğraf seç", type=["jpg", "png", "jpeg"])
+
+photo = camera_photo if camera_photo else gallery_photo
+
+if photo:
+    st.success("✅ Fotoğraf alındı! Analiz ediliyor..."
     time.sleep(1)
     
     # Simüle analiz
