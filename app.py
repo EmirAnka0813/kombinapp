@@ -12,27 +12,48 @@ st.set_page_config(page_title="KombinApp", page_icon="👕", layout="wide")
 st.markdown("""
 <style>
     .stApp {
-        background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+        background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
         background-size: 400% 400%;
-        animation: gradient 15s ease infinite;
+        animation: gradientBG 15s ease infinite;
     }
     
-    @keyframes gradient {
+    @keyframes gradientBG {
         0% { background-position: 0% 50%; }
         50% { background-position: 100% 50%; }
         100% { background-position: 0% 50%; }
     }
     
+    /* Yıldızlar */
+    .stars {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        background-image: 
+            radial-gradient(2px 2px at 20px 30px, white, transparent),
+            radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+            radial-gradient(1px 1px at 90px 40px, white, transparent),
+            radial-gradient(2px 2px at 160px 120px, rgba(255,255,255,0.6), transparent),
+            radial-gradient(1px 1px at 230px 80px, white, transparent),
+            radial-gradient(2px 2px at 300px 150px, rgba(255,255,255,0.7), transparent),
+            radial-gradient(1px 1px at 400px 60px, white, transparent),
+            radial-gradient(2px 2px at 500px 200px, rgba(255,255,255,0.5), transparent);
+        background-repeat: repeat;
+        background-size: 600px 300px;
+        opacity: 0.5;
+    }
+    
     .welcome-box {
-        background: linear-gradient(135deg, rgba(102,126,234,0.8), rgba(118,75,162,0.8));
+        background: rgba(255, 255, 255, 0.95);
         border-radius: 30px;
         padding: 50px;
         text-align: center;
-        color: white;
         margin: 30px auto;
         max-width: 600px;
         backdrop-filter: blur(20px);
-        border: 2px solid rgba(255,255,255,0.2);
+        border: 2px solid rgba(255,255,255,0.5);
         box-shadow: 0 20px 60px rgba(0,0,0,0.3);
     }
     
@@ -46,12 +67,13 @@ st.markdown("""
     }
     
     .camera-box {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, rgba(102,126,234,0.9), rgba(118,75,162,0.9));
         border-radius: 25px;
         padding: 40px;
         text-align: center;
         color: white;
         margin: 20px 0;
+        backdrop-filter: blur(10px);
     }
     
     .start-btn {
@@ -81,6 +103,15 @@ st.markdown("""
         animation: float 2s ease-in-out infinite;
     }
     
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+    }
+    
+    .pulse-anim {
+        animation: pulse 2s ease-in-out infinite;
+    }
+    
     .outfit-box {
         background: white;
         border-radius: 20px;
@@ -89,8 +120,24 @@ st.markdown("""
         color: #333;
         text-align: center;
     }
+    
+    /* Butonlar */
+    .stButton > button {
+        border-radius: 15px;
+        font-weight: bold;
+    }
+    
+    /* Kartlar */
+    .stSelectbox > div > div {
+        border-radius: 15px;
+    }
+    
+    h1, h2, h3 {
+        color: white !important;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
 </style>
-""", unsafe_allow_html=True)
+""" + "<div class='stars'></div>", unsafe_allow_html=True)
 
 # Session state
 if 'started' not in st.session_state:
